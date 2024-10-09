@@ -34,6 +34,24 @@ public class InfoPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         backButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        gridSizeField = new javax.swing.JFormattedTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        initialPredatorsField = new javax.swing.JFormattedTextField();
+        intialPreyField = new javax.swing.JFormattedTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        predatorReproductionField = new javax.swing.JFormattedTextField();
+        preyReproductionField = new javax.swing.JFormattedTextField();
+        jLabel7 = new javax.swing.JLabel();
+        predatorDeathField = new javax.swing.JFormattedTextField();
+        jLabel8 = new javax.swing.JLabel();
+        predatorMealField = new javax.swing.JFormattedTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -42,21 +60,178 @@ public class InfoPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("UD Digi Kyokasho NP-B", 0, 18)); // NOI18N
+        jLabel1.setText("PREDATOR PREY by Markus Ong");
+
+        jLabel2.setText("Grid Size:");
+
+        gridSizeField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        gridSizeField.setText("30");
+        gridSizeField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gridSizeFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Intial Predators:");
+
+        jLabel4.setText("Intial Prey:");
+
+        initialPredatorsField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        initialPredatorsField.setText("10");
+        initialPredatorsField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                initialPredatorsFieldActionPerformed(evt);
+            }
+        });
+
+        intialPreyField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        intialPreyField.setText("100");
+        intialPreyField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intialPreyFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Predator Reproduction Chance:");
+
+        jLabel6.setText("Prey Reproduction Chance:");
+
+        predatorReproductionField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        predatorReproductionField.setText("3");
+        predatorReproductionField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                predatorReproductionFieldActionPerformed(evt);
+            }
+        });
+
+        preyReproductionField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        preyReproductionField.setText("5");
+        preyReproductionField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                preyReproductionFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Predator Death Requirement:");
+
+        predatorDeathField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        predatorDeathField.setText("20");
+        predatorDeathField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                predatorDeathFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Predator Meal Requirement:");
+
+        predatorMealField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        predatorMealField.setText("10");
+        predatorMealField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                predatorMealFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("%");
+
+        jLabel10.setText("%");
+
+        jLabel11.setText("(press enter after making a change to a setting or it wont update)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(151, 151, 151)
-                .addComponent(backButton)
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(126, 126, 126)
+                                .addComponent(gridSizeField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel11))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(94, 94, 94)
+                                .addComponent(initialPredatorsField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(preyReproductionField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(jLabel10))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(predatorReproductionField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(jLabel9))
+                                            .addComponent(predatorDeathField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(predatorMealField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addComponent(intialPreyField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addGap(0, 19, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addComponent(backButton)
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(backButton))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(gridSizeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel11)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(initialPredatorsField, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(intialPreyField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(predatorReproductionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(preyReproductionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(predatorDeathField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(predatorMealField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 30, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -64,8 +239,82 @@ public class InfoPanel extends javax.swing.JPanel {
         switcher.switchToCard(IntroPanel.CARD_NAME);
     }//GEN-LAST:event_backButtonActionPerformed
 
+    private void gridSizeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gridSizeFieldActionPerformed
+        try{
+            PredatorPrey.setSize(Integer.parseInt(gridSizeField.getText()));
+        }catch(NumberFormatException e){
+            PredatorPrey.setSize(30);
+        }
+    }//GEN-LAST:event_gridSizeFieldActionPerformed
+
+    private void initialPredatorsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_initialPredatorsFieldActionPerformed
+        try{
+            PredatorPrey.setSTARTING_PREDATORS(Integer.parseInt(initialPredatorsField.getText()));
+        }catch(NumberFormatException e){
+            PredatorPrey.setSTARTING_PREDATORS(10);
+        }
+    }//GEN-LAST:event_initialPredatorsFieldActionPerformed
+
+    private void intialPreyFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intialPreyFieldActionPerformed
+        try{
+            PredatorPrey.setSTARTING_PREYS(Integer.parseInt(intialPreyField.getText()));
+        }catch(NumberFormatException e){
+            PredatorPrey.setSTARTING_PREYS(100);
+        }
+    }//GEN-LAST:event_intialPreyFieldActionPerformed
+
+    private void predatorReproductionFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_predatorReproductionFieldActionPerformed
+        try{
+            PredatorPrey.setPREDATOR_REPRODUCTION_CHANCE(Integer.parseInt(predatorReproductionField.getText())/100.0);
+        }catch(NumberFormatException e){
+            PredatorPrey.setPREDATOR_REPRODUCTION_CHANCE(0.03);
+        }
+    }//GEN-LAST:event_predatorReproductionFieldActionPerformed
+
+    private void preyReproductionFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preyReproductionFieldActionPerformed
+        try{
+            PredatorPrey.setPREY_REPRODUCTION_CHANCE(Integer.parseInt(preyReproductionField.getText())/100.0);
+        }catch(NumberFormatException e){
+            PredatorPrey.setPREY_REPRODUCTION_CHANCE(0.05);
+        }
+    }//GEN-LAST:event_preyReproductionFieldActionPerformed
+
+    private void predatorDeathFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_predatorDeathFieldActionPerformed
+        try{
+            PredatorPrey.setPREDATOR_DEATH_REQUIREMENT(Integer.parseInt(predatorDeathField.getText()));
+        }catch(NumberFormatException e){
+            PredatorPrey.setPREDATOR_DEATH_REQUIREMENT(20);
+        }
+    }//GEN-LAST:event_predatorDeathFieldActionPerformed
+
+    private void predatorMealFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_predatorMealFieldActionPerformed
+        try{
+            PredatorPrey.setPREDATOR_MEAL_REQUIREMENT(Integer.parseInt(predatorMealField.getText()));
+        }catch(NumberFormatException e){
+            PredatorPrey.setPREDATOR_MEAL_REQUIREMENT(10);
+        }
+    }//GEN-LAST:event_predatorMealFieldActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
+    private javax.swing.JFormattedTextField gridSizeField;
+    private javax.swing.JFormattedTextField initialPredatorsField;
+    private javax.swing.JFormattedTextField intialPreyField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JFormattedTextField predatorDeathField;
+    private javax.swing.JFormattedTextField predatorMealField;
+    private javax.swing.JFormattedTextField predatorReproductionField;
+    private javax.swing.JFormattedTextField preyReproductionField;
     // End of variables declaration//GEN-END:variables
 }
