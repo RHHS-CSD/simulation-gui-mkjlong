@@ -7,7 +7,10 @@ package automatastarter;
 
 import utils.CardSwitcher;
 import java.awt.CardLayout;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
+import utils.ImageUtil;
 
 /**
  *
@@ -16,10 +19,12 @@ import javax.swing.JPanel;
 public class IntroPanel extends javax.swing.JPanel {
         public static final String CARD_NAME = "intro";
     CardSwitcher switcher = null;
+    BufferedImage startImage;
     /**
      * Creates new form IntroPanel
      */
     public IntroPanel(CardSwitcher p) {
+        startImage = ImageUtil.loadAndResizeImage("start.png", 512/4, 218/4);
         initComponents();
         switcher = p;
     }
@@ -33,60 +38,100 @@ public class IntroPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        GameButton = new javax.swing.JButton();
-        infoButton = new javax.swing.JButton();
+        startButton = new javax.swing.JButton();
+        aboutButton = new javax.swing.JButton();
+        quitButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
-        GameButton.setText("Game");
-        GameButton.addActionListener(new java.awt.event.ActionListener() {
+        setMaximumSize(new java.awt.Dimension(600, 400));
+        setMinimumSize(new java.awt.Dimension(600, 400));
+        setPreferredSize(new java.awt.Dimension(600, 400));
+        setRequestFocusEnabled(false);
+
+        startButton.setFont(new java.awt.Font("UD Digi Kyokasho NP-B", 0, 12)); // NOI18N
+        startButton.setText("Start");
+        startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GameButtonActionPerformed(evt);
+                startButtonActionPerformed(evt);
             }
         });
 
-        infoButton.setText("I don't know why I'm here");
-        infoButton.setToolTipText("");
-        infoButton.addActionListener(new java.awt.event.ActionListener() {
+        aboutButton.setFont(new java.awt.Font("UD Digi Kyokasho NP-B", 0, 12)); // NOI18N
+        aboutButton.setText("About");
+        aboutButton.setToolTipText("");
+        aboutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                infoButtonActionPerformed(evt);
+                aboutButtonActionPerformed(evt);
             }
         });
+
+        quitButton.setFont(new java.awt.Font("UD Digi Kyokasho NP-B", 0, 12)); // NOI18N
+        quitButton.setText("Quit");
+        quitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("UD Digi Kyokasho NP-B", 0, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Predator Prey");
+        jLabel1.setPreferredSize(new java.awt.Dimension(87, 15));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(GameButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(infoButton)))
-                .addContainerGap(144, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(92, 92, 92)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(aboutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(quitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(48, 48, 48))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addComponent(GameButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(infoButton)
-                .addContainerGap(116, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(81, Short.MAX_VALUE)
+                .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(aboutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(44, 44, 44)
+                .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(84, 84, 84))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void GameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GameButtonActionPerformed
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
        switcher.switchToCard(GamePanel.CARD_NAME);
-    }//GEN-LAST:event_GameButtonActionPerformed
+    }//GEN-LAST:event_startButtonActionPerformed
 
-    private void infoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoButtonActionPerformed
+    private void aboutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutButtonActionPerformed
         switcher.switchToCard(InfoPanel.CARD_NAME);
-    }//GEN-LAST:event_infoButtonActionPerformed
+    }//GEN-LAST:event_aboutButtonActionPerformed
 
+    private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_quitButtonActionPerformed
+
+    
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        /*if (startImage != null) {
+            g.drawImage(startImage, 200, 100, this);
+        }*/
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton GameButton;
-    private javax.swing.JButton infoButton;
+    private javax.swing.JButton aboutButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton quitButton;
+    private javax.swing.JButton startButton;
     // End of variables declaration//GEN-END:variables
 }

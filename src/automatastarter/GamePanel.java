@@ -5,6 +5,8 @@
  */
 package automatastarter;
 
+import static automatastarter.PredatorPrey.*;
+import java.awt.Color;
 import utils.CardSwitcher;
 import utils.ImageUtil;
 import java.awt.Graphics;
@@ -17,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -31,27 +34,26 @@ import javax.swing.Timer;
  * @author michael.roy-diclemen
  */
 public class GamePanel extends javax.swing.JPanel implements MouseListener {
-
     public static final String CARD_NAME = "game";
-
     CardSwitcher switcher; // This is the parent panel
+    
+    
+    ArrayList<int[][]> grids = new ArrayList();
+    private int delay;
+
+    
+    private int mousedown = 0;
     Timer animTimer;
-    // Image img1 = Toolkit.getDefaultToolkit().getImage("yourFile.jpg");
-    BufferedImage img1;
-    //variables to control your animation elements
-    int x = 0;
-    int y = 10;
-    int xdir = 5;
-    int lineX = 0;
 
     /**
      * Creates new form GamePanel
      */
     public GamePanel(CardSwitcher p) {
         initComponents();
+        
+        reset();
 
-        img1 = ImageUtil.loadAndResizeImage("yourFile.jpg", 300, 300);//, WIDTH, HEIGHT)//ImageIO.read(new File("yourFile.jpg"));
-
+        //img1 = ImageUtil.loadAndResizeImage("yourFile.jpg", 300, 300);//, WIDTH, HEIGHT)//ImageIO.read(new File("yourFile.jpg"));
         this.setFocusable(true);
 
         // tell the program we want to listen to the mouse
@@ -59,12 +61,26 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         //tells us the panel that controls this one
         switcher = p;
         //create and start a Timer for animation
-        animTimer = new Timer(10, new AnimTimerTick());
-        animTimer.start();
 
         //set up the key bindings
         setupKeys();
 
+    }
+    
+    private void reset(){
+        grids.clear();
+        grids.add(generateGrid());
+        timeSlider.setMaximum(0);
+        timeSlider.setValue(0);
+        speedSelector.setSelectedIndex(0);
+        setDelay(-1);
+        
+        
+        smartPreyToggle.setSelected(isSMART_PREY());
+        toroidalToggle.setSelected(isTOROIDAL_GRID());
+        
+        repaint();
+        
     }
 
     private void setupKeys() {
@@ -84,10 +100,25 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (img1 != null) {
-            g.drawImage(img1, x, y, this);
-        }
-        g.drawLine(lineX, 0, 300, 300);
+        //if (img1 != null) {
+        //    g.drawImage(img1, x, y, this);
+        //}
+        
+        g.setColor(new Color(0x5A5A5A));
+        g.fillRect(200, 20, 300, 300);
+
+
+        int[] data = displayGrid(grids.get(getStep()), getStep(), g);
+        int numPredators = data[0];
+        int numPrey = data[1];
+        stepLabel.setText(""+getStep());
+        
+        predatorCount.setText("Predators: "+numPredators);
+        preyCount.setText("Prey: "+numPrey);
+        
+        g.setColor(new Color(0x000000));
+        g.drawRect(200, 20, 300, 300);
+        //g.drawLine(lineX, 0, 300, 300);
     }
 
     /**
@@ -99,41 +130,342 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        timeSlider = new javax.swing.JSlider();
+        speedSelector = new javax.swing.JComboBox<>();
+        forwardButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
+        frontButton = new javax.swing.JButton();
+        beginningButton = new javax.swing.JButton();
+        stepLabel = new javax.swing.JLabel();
+        beginningButton2 = new javax.swing.JButton();
+        deleteFutureGridsButton = new javax.swing.JButton();
+        smartPreyToggle = new javax.swing.JCheckBox();
+        toroidalToggle = new javax.swing.JCheckBox();
+        predatorCount = new javax.swing.JLabel();
+        preyCount = new javax.swing.JLabel();
+        exitButton = new javax.swing.JButton();
+        newGridButton = new javax.swing.JButton();
 
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                GamePanel.this.mouseDragged(evt);
+            }
+        });
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
 
-        jLabel1.setText("Game");
+        timeSlider.setMaximum(0);
+        timeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                timeSliderStateChanged(evt);
+            }
+        });
+
+        speedSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "x0", "x1", "x10", "x100", "x1000" }));
+        speedSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                speedSelectorActionPerformed(evt);
+            }
+        });
+
+        forwardButton.setText(">");
+        forwardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forwardButtonActionPerformed(evt);
+            }
+        });
+
+        backButton.setText("<");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        frontButton.setText(">>");
+        frontButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frontButtonActionPerformed(evt);
+            }
+        });
+
+        beginningButton.setText("<<");
+        beginningButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                beginningButtonActionPerformed(evt);
+            }
+        });
+
+        stepLabel.setText("0");
+
+        beginningButton2.setText("<<");
+        beginningButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                beginningButton2ActionPerformed(evt);
+            }
+        });
+
+        deleteFutureGridsButton.setText("Delete Future Grids");
+        deleteFutureGridsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteFutureGridsButtonActionPerformed(evt);
+            }
+        });
+
+        smartPreyToggle.setText("Smart Prey");
+        smartPreyToggle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smartPreyToggleActionPerformed(evt);
+            }
+        });
+
+        toroidalToggle.setText("Toroidal Grid");
+        toroidalToggle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toroidalToggleActionPerformed(evt);
+            }
+        });
+
+        predatorCount.setText("Predators: 10");
+
+        preyCount.setText("Prey: 10");
+
+        exitButton.setText("Back");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
+
+        newGridButton.setText("New Grid");
+        newGridButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGridButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(174, 174, 174)
-                .addComponent(jLabel1)
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(timeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(beginningButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(backButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(speedSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(forwardButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(frontButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(stepLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(smartPreyToggle)
+                            .addComponent(toroidalToggle)
+                            .addComponent(deleteFutureGridsButton)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(357, 357, 357)
+                                .addComponent(preyCount, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(199, 199, 199)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(predatorCount, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(beginningButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(newGridButton, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(135, 135, 135)
-                .addComponent(jLabel1)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(exitButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(predatorCount)
+                        .addComponent(preyCount)))
+                .addGap(28, 28, 28)
+                .addComponent(newGridButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(deleteFutureGridsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(smartPreyToggle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toroidalToggle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+                .addComponent(beginningButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(timeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(beginningButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(speedSelector, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(forwardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(frontButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(stepLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(14, 14, 14))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        lineX = 0;
+        
     }//GEN-LAST:event_formComponentShown
 
+    private void speedSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speedSelectorActionPerformed
+        switch(speedSelector.getSelectedIndex()){
+            case 0:{
+                setDelay(-1);
+                break;
+            }
+            case 1:{
+                setDelay(100);
+                break;
+            }
+            case 2:{
+                setDelay(10);
+                break;
+            }
+            case 3:{
+                setDelay(1);
+                break;
+            }
+            case 4:{
+                setDelay(0);
+                break;
+            }
+        }
+        
+    }//GEN-LAST:event_speedSelectorActionPerformed
+
+    private void forwardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forwardButtonActionPerformed
+        tick();
+    }//GEN-LAST:event_forwardButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        setStep(getStep()-1);
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void frontButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frontButtonActionPerformed
+        // TODO add your handling code here:
+        setStep(timeSlider.getMaximum());
+    }//GEN-LAST:event_frontButtonActionPerformed
+
+    private void beginningButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beginningButtonActionPerformed
+        // TODO add your handling code here:
+        // i dont know where the beginning button 1 went so i made another one??
+    }//GEN-LAST:event_beginningButtonActionPerformed
+
+    private void timeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSliderStateChanged
+        // TODO add your handling code here:
+        repaint();
+        
+    }//GEN-LAST:event_timeSliderStateChanged
+
+    private void beginningButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beginningButton2ActionPerformed
+        // TODO add your handling code here:
+        setStep(0);
+    }//GEN-LAST:event_beginningButton2ActionPerformed
+
+    private void smartPreyToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smartPreyToggleActionPerformed
+        // TODO add your handling code here:
+        boolean value = toroidalToggle.isSelected();
+        setSMART_PREY(value);
+    }//GEN-LAST:event_smartPreyToggleActionPerformed
+
+    private void toroidalToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toroidalToggleActionPerformed
+        // TODO add your handling code here:
+        boolean value = toroidalToggle.isSelected();
+        setTOROIDAL_GRID(value);
+    }//GEN-LAST:event_toroidalToggleActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        // TODO add your handling code here:
+        setDelay(-1);
+        switcher.switchToCard(IntroPanel.CARD_NAME);
+    }//GEN-LAST:event_exitButtonActionPerformed
+
+    private void deleteFutureGridsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteFutureGridsButtonActionPerformed
+        // TODO add your handling code here:
+        while(grids.size()>getStep()+1){
+            grids.removeLast();
+        }
+        timeSlider.setMaximum(getStep());
+        repaint();
+    }//GEN-LAST:event_deleteFutureGridsButtonActionPerformed
+
+    private void newGridButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGridButtonActionPerformed
+        reset();
+    }//GEN-LAST:event_newGridButtonActionPerformed
+
+    private void mouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseDragged
+        // TODO add your handling code here:
+        if(mousedown == 0)return;
+        
+        add(evt);
+    }//GEN-LAST:event_mouseDragged
+
+    private void add(MouseEvent evt){
+        System.out.println("hii");
+        int x = evt.getX() - 200;
+        int y = evt.getY() - 20;
+        
+        if(x<0 || x >= 300 || y < 0 || y >= 300)return;
+        
+        int i = (int) (x/getPixelSize());
+        int j = (int) (y/getPixelSize());
+        
+        if(mousedown == 1){
+            if(grids.get(getStep())[i][j]>0){
+                grids.get(getStep())[i][j] = 0;
+            }else{
+                grids.get(getStep())[i][j]=getPREDATOR_DEATH_REQUIREMENT();
+            }
+        }else if(mousedown == 3){
+            if(grids.get(getStep())[i][j]<0){
+                grids.get(getStep())[i][j] = 0;
+            }else{
+                grids.get(getStep())[i][j]=-1;
+            }
+        }
+        repaint();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton backButton;
+    private javax.swing.JButton beginningButton;
+    private javax.swing.JButton beginningButton2;
+    private javax.swing.JButton deleteFutureGridsButton;
+    private javax.swing.JButton exitButton;
+    private javax.swing.JButton forwardButton;
+    private javax.swing.JButton frontButton;
+    private javax.swing.JButton newGridButton;
+    private javax.swing.JLabel predatorCount;
+    private javax.swing.JLabel preyCount;
+    private javax.swing.JCheckBox smartPreyToggle;
+    private javax.swing.JComboBox<String> speedSelector;
+    private javax.swing.JLabel stepLabel;
+    private javax.swing.JSlider timeSlider;
+    private javax.swing.JCheckBox toroidalToggle;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -143,50 +475,46 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
      * @param me
      */
     public void mouseClicked(MouseEvent me) {
-        System.out.println("Click: " + me.getX() + ":" + me.getY());
-        x = 5;
-        y = 5;
+        //add(me);
+    }
+    
+    public void setDelay(int delay) {
+        if(delay < 0){
+            if(animTimer==null)return;
+            animTimer.stop();
+            return;
+        }
+        if (animTimer != null) {
+            animTimer.stop();
+            tick();
+        }
+        animTimer = new Timer(delay, new AnimTimerTick());
+        animTimer.start();
     }
 
-    /**
-     * When the mountain is pressed
-     *
-     * @param me
-     */
-    public void mousePressed(MouseEvent me) {
-        System.out.println("Press: " + me.getX() + ":" + me.getY());
+    @Override
+    public void mousePressed(MouseEvent e) {
+        System.out.println("AAA" + e.getButton());
+        mousedown = e.getButton();
+        add(e);
     }
 
-    /**
-     * When the mouse button is released
-     *
-     * @param me
-     */
-    public void mouseReleased(MouseEvent me) {
-        System.out.println("Release: " + me.getX() + ":" + me.getY());
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        System.out.println("setting mousedown to 0");
+        mousedown = 0;
     }
 
-    /**
-     * When the mouse enters the area
-     *
-     * @param me
-     */
-    public void mouseEntered(MouseEvent me) {
-        System.out.println("Enter: " + me.getX() + ":" + me.getY());
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        
     }
 
-    /**
-     * When the mouse exits the panel
-     *
-     * @param me
-     */
-    public void mouseExited(MouseEvent me) {
-        System.out.println("Exit: " + me.getX() + ":" + me.getY());
+    @Override
+    public void mouseExited(MouseEvent e) {
+        
     }
 
-    /**
-     * Everything inside here happens when you click on a captured key.
-     */
     private class Move extends AbstractAction {
 
         String key;
@@ -196,18 +524,42 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         }
 
         public void actionPerformed(ActionEvent ae) {
-            // here you decide what you want to happen if a particular key is pressed
-            System.out.println("llll" + key);
+            System.out.println(key);
             switch(key){
-                case "d": x+=2; break;
-                case "x": animTimer.stop(); switcher.switchToCard(EndPanel.CARD_NAME); break;
+                case "arrowLeft":{
+                    break;
+                }
             }
-            if (key.equals("d")) {
-                x = x + 2;
-            }
-            
+
         }
 
+    }
+
+    private void tick() {
+        int step = incrementStep();
+
+        while (step >= grids.size()) {
+            grids.add(nextGrid(grids.get(grids.size() - 1)));
+            timeSlider.setMaximum(step);
+            timeSlider.setValue(step);
+        }
+        //force redraw
+        repaint();
+    }
+    
+    private int getStep(){
+        return timeSlider.getValue();
+    }
+    
+    private int incrementStep(){
+        int step = getStep()+1;
+        timeSlider.setValue(step);
+        return step;
+    }
+    
+    private void setStep(int step){
+        timeSlider.setValue(step);
+        repaint();
     }
 
     /**
@@ -217,10 +569,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     private class AnimTimerTick implements ActionListener {
 
         public void actionPerformed(ActionEvent ae) {
-            //the stuff we want to change every clock tick
-            lineX++;
-            //force redraw
-            repaint();
+            tick();
         }
     }
 }
